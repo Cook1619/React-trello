@@ -75,6 +75,7 @@ class CardsList extends Component {
     this.handleSaveCard = this.handleSaveCard.bind(this);
     this.handleRemoveTag = this.handleRemoveTag.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
+    this.renderCards = this.renderCards.bind(this);
   }
 
   // TODO: implement the handleAddNewCard method to add a new card to the list.
@@ -154,13 +155,8 @@ class CardsList extends Component {
   // Tips:
   // - Iterate through this.props.cards to render each Card
   renderCards() {
-    return (
-      <ol className="cards">
-        {this.props.cards.map((card) => (
-          <li>{card}</li>
-        ))}
-      </ol>
-    );
+    console.log(this.props);
+    return this.props.cards.map((card) => <Card key={card.id} card={card} />);
   }
 
   // TODO: implement the renderFooter method to render the list footer UI.
@@ -171,14 +167,11 @@ class CardsList extends Component {
 
   // TODO: render the CardsList UI.
   render() {
-    console.log("TESTING", this.props);
     return (
       <div className="cards-list">
         {/* render list header */}
         {/* render cards */}
-        {/* {this.props.cards.map((card) => (
-          <Card key={card.id} card={card} />
-        ))} */}
+        {this.renderCards()}
         {/* render card editor */}
       </div>
     );
