@@ -171,11 +171,14 @@ class CardsList extends Component {
 
   // TODO: render the CardsList UI.
   render() {
+    console.log("TESTING", this.props);
     return (
       <div className="cards-list">
         {/* render list header */}
         {/* render cards */}
-        {/* render list footer */}
+        {/* {this.props.cards.map((card) => (
+          <Card key={card.id} card={card} />
+        ))} */}
         {/* render card editor */}
       </div>
     );
