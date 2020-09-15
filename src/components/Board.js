@@ -140,7 +140,9 @@ class Board extends Component {
   // - Pass the necessary methods to the CardsList component to handle all actions
   renderLists() {
     return (
-      <div className="board-lists">{this.state.list((list) => list.title)}</div>
+      <div className="board-lists">
+        {this.state.lists.map((list) => list.title)}
+      </div>
     );
   }
 
