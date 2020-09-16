@@ -142,10 +142,10 @@ class CardsList extends Component {
     return (
       <div className="cards-list-header">
         <div className="cards-list-title">
-          {/* render the list title */}
+          <h3>{this.props.title}</h3>
           {/* render the Menu component */}
         </div>
-        {/* render the number of cards in this list */}
+        <p>{this.props.cards.length} cards</p>
       </div>
     );
   }
@@ -154,7 +154,7 @@ class CardsList extends Component {
   // Tips:
   // - Iterate through this.props.cards to render each Card
   renderCards() {
-    this.props.cards.map((card, index) => (
+    return this.props.cards.map((card, index) => (
       <li key={card.id}>
         <Card
           id={card.id}
@@ -177,7 +177,7 @@ class CardsList extends Component {
   render() {
     return (
       <div className="cards-list">
-        {/* render list header */}
+        {this.renderHeader()}
         {this.renderCards()}
         {/* render list footer */}
         {/* render card editor */}

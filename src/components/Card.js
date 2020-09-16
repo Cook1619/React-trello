@@ -19,10 +19,10 @@ import Tag from "./Tag";
  */
 const Card = ({ id, number, description, tags }) => (
   <div className="card">
-    {tags.map((tag) => (
-      <Tag tag={tag} />
+    {tags.map((tag, index) => (
+      <Tag key={index} tag={tag} />
     ))}
-    {/* render card number and description */}
+    <p>{`# ${number} ${description}`}</p>
   </div>
 );
 
