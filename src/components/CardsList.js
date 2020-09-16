@@ -25,6 +25,18 @@ import Form from "./Form";
 class CardsList extends Component {
   constructor(props) {
     super(props);
+    // TODO: Bind your class methods here
+    // ...
+    this.handleAddNewCard = this.handleAddNewCard.bind(this);
+    this.handleCancelNewCard = this.handleCancelNewCard.bind(this);
+    this.handleCreateNewCard = this.handleCreateNewCard(this);
+    this.handleEditCard = this.handleEditCard.bind(this);
+    this.handleCopyCard = this.handleCopyCard.bind(this);
+    this.handleArchiveCard = this.handleArchiveCard.bind(this);
+    this.handleSaveCard = this.handleSaveCard.bind(this);
+    this.handleRemoveTag = this.handleRemoveTag.bind(this);
+    this.handleAddTag = this.handleAddTag.bind(this);
+    this.renderCards = this.renderCards.bind(this);
 
     // CardsList state
     this.state = {
@@ -63,19 +75,6 @@ class CardsList extends Component {
         },
       ],
     ];
-
-    // TODO: Bind your class methods here
-    // ...
-    this.handleAddNewCard = this.handleAddNewCard.bind(this);
-    this.handleCancelNewCard = this.handleCancelNewCard.bind(this);
-    this.handleCreateNewCard = this.handleCreateNewCard(this);
-    this.handleEditCard = this.handleEditCard.bind(this);
-    this.handleCopyCard = this.handleCopyCard.bind(this);
-    this.handleArchiveCard = this.handleArchiveCard.bind(this);
-    this.handleSaveCard = this.handleSaveCard.bind(this);
-    this.handleRemoveTag = this.handleRemoveTag.bind(this);
-    this.handleAddTag = this.handleAddTag.bind(this);
-    this.renderCards = this.renderCards.bind(this);
   }
 
   // TODO: implement the handleAddNewCard method to add a new card to the list.
@@ -155,8 +154,17 @@ class CardsList extends Component {
   // Tips:
   // - Iterate through this.props.cards to render each Card
   renderCards() {
-    console.log(this.props);
-    return this.props.cards.map((card) => <Card key={card.id} card={card} />);
+    this.props.cards.map((card, index) => (
+      <li key={card.id}>
+        <Card
+          id={card.id}
+          index={index}
+          number={card.number}
+          tags={card.tags}
+          description={card.description}
+        />
+      </li>
+    ));
   }
 
   // TODO: implement the renderFooter method to render the list footer UI.
@@ -170,8 +178,8 @@ class CardsList extends Component {
     return (
       <div className="cards-list">
         {/* render list header */}
-        {/* render cards */}
         {this.renderCards()}
+        {/* render list footer */}
         {/* render card editor */}
       </div>
     );

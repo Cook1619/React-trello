@@ -42,7 +42,11 @@ class Board extends Component {
   // Tips:
   // - Use the `this.setState` method to update the component state
   componentDidMount() {
-    this.setState({ cards: data.cards, lists: data.lists });
+    this.setState({
+      cards: data.cards,
+      lists: data.lists,
+      listOrder: data.listOrder,
+    });
   }
 
   // TODO: implement the handleAddList method to add a new list to the board.
@@ -141,7 +145,21 @@ class Board extends Component {
   renderLists() {
     return (
       <div className="board-lists">
-        {this.state.lists.map((list) => list.title)}
+        {this.state.listOrder.map((listId, index) => {
+          console.log(this.state.lists[listId]);
+          const list = this.state.lists[listId];
+          const cards = list.cardIds.map((key) => this.state.cards[key]);
+          return (
+            <li key={list.id}>
+              <CardsList
+                id={list.id}
+                index={index}
+                title={list.title}
+                cards={cards}
+              />
+            </li>
+          );
+        })}
       </div>
     );
   }
@@ -156,7 +174,7 @@ class Board extends Component {
   render() {
     return (
       <div className="board">
-        <CardsList cards={this.state.cards} />
+        {this.renderLists()}
         <Form />
       </div>
     );
