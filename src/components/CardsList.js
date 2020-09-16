@@ -171,7 +171,14 @@ class CardsList extends Component {
   // Tips:
   // - Should render either a Form component to create a new card
   // or a button to trigger the card creation mode (creatingNewCard)
-  renderFooter() {}
+  renderFooter() {
+    return (
+      <button>
+        <AddIcon />
+        <p>Add new card</p>
+      </button>
+    );
+  }
 
   // TODO: render the CardsList UI.
   render() {
@@ -179,7 +186,7 @@ class CardsList extends Component {
       <div className="cards-list">
         {this.renderHeader()}
         {this.renderCards()}
-        {/* render list footer */}
+        {this.renderFooter()}
         {/* render card editor */}
       </div>
     );
