@@ -173,7 +173,7 @@ class CardsList extends Component {
   // or a button to trigger the card creation mode (creatingNewCard)
   renderFooter() {
     return (
-      <button>
+      <button onClick={this.creatingNewCard}>
         <AddIcon />
         <p>Add new card</p>
       </button>
