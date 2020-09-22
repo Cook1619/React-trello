@@ -146,7 +146,6 @@ class Board extends Component {
     return (
       <div className="board-lists">
         {this.state.listOrder.map((listId, index) => {
-          console.log(this.state.lists[listId]);
           const list = this.state.lists[listId];
           const cards = list.cardIds.map((key) => this.state.cards[key]);
           return (

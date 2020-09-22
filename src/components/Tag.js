@@ -14,8 +14,8 @@ import PropTypes from "prop-types";
  * - You can use the 'tag' CSS class for styling
  *
  */
-const Tag = ({ tag }) => {
-  if (tag) return <span className="tag">{tag}</span>;
+const Tag = ({ text }) => {
+  if (text) return <span className="tag">{text}</span>;
   return null;
 };
 

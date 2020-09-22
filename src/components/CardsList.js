@@ -86,7 +86,9 @@ class CardsList extends Component {
   // TODO: implement the handleCancelNewCard method.
   // Tips:
   // - Use the `this.setState` method to update the state in order to close the card creation form
-  handleCancelNewCard() {}
+  handleCancelNewCard() {
+    this.setState({ creatingNewCard: false });
+  }
 
   // TODO: implement the handleCreateNewCard method.
   // Tips:
@@ -172,8 +174,15 @@ class CardsList extends Component {
   // - Should render either a Form component to create a new card
   // or a button to trigger the card creation mode (creatingNewCard)
   renderFooter() {
-    return (
-      <button onClick={this.creatingNewCard}>
+    return this.state.creatingNewCard ? (
+      <Form
+        type="text"
+        placeholder="Add card title"
+        onClickSubmit={this.handleAddNewCard}
+        onClickCancel={this.handleCancelNewCard}
+      />
+    ) : (
+      <button onClick={this.handleCreateNewCard}>
         <AddIcon />
         <p>Add new card</p>
       </button>
@@ -212,7 +221,7 @@ CardsList.defaultProps = {
 CardsList.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  cards: PropTypes.objectOf(
+  cards: PropTypes.arrayOf(
     PropTypes.exact({
       id: PropTypes.string.isRequired,
       number: PropTypes.number.isRequired,
