@@ -29,7 +29,7 @@ class CardsList extends Component {
     // ...
     this.handleAddNewCard = this.handleAddNewCard.bind(this);
     this.handleCancelNewCard = this.handleCancelNewCard.bind(this);
-    this.handleCreateNewCard = this.handleCreateNewCard(this);
+    this.handleCreateNewCard = this.handleCreateNewCard.bind(this);
     this.handleEditCard = this.handleEditCard.bind(this);
     this.handleCopyCard = this.handleCopyCard.bind(this);
     this.handleArchiveCard = this.handleArchiveCard.bind(this);
@@ -176,13 +176,17 @@ class CardsList extends Component {
   renderFooter() {
     return this.state.creatingNewCard ? (
       <Form
-        type="text"
-        placeholder="Add card title"
+        type="card"
+        placeholder="Enter a title for this card..."
         onClickSubmit={this.handleAddNewCard}
         onClickCancel={this.handleCancelNewCard}
+        buttonText="Add Card"
       />
     ) : (
-      <button onClick={this.handleCreateNewCard}>
+      <button
+        className="add-button add-card-button"
+        onClick={this.handleCreateNewCard}
+      >
         <AddIcon />
         <p>Add new card</p>
       </button>

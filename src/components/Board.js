@@ -174,7 +174,7 @@ class Board extends Component {
     return (
       <div className="board">
         {this.renderLists()}
-        <Form />
+        <Form type="editor" />
       </div>
     );
   }
