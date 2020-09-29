@@ -157,15 +157,17 @@ class CardsList extends Component {
   // - Iterate through this.props.cards to render each Card
   renderCards() {
     return this.props.cards.map((card, index) => (
-      <li key={card.id}>
-        <Card
-          id={card.id}
-          index={index}
-          number={card.number}
-          tags={card.tags}
-          description={card.description}
-        />
-      </li>
+      <ul key={card.id}>
+        <li>
+          <Card
+            id={card.id}
+            index={index}
+            number={card.number}
+            tags={card.tags}
+            description={card.description}
+          />
+        </li>
+      </ul>
     ));
   }
 
