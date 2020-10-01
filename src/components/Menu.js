@@ -21,12 +21,18 @@ import Popover from './Popover';
  * - You can use the 'menu' CSS class for styling
  * 
  */ 
-const Menu = (props) => (
-  <div className="menu">
-    { /* render the menu icon */ }
-    { /* render the lists of actions */ }
-  </div>
-);
+const Menu = ({ isOpen, onClick }) => {
+  return (
+    <div className="menu">
+      <MenuIcon onClick={onClick}/>
+      {
+        isOpen && (
+          <Popover />
+        )
+      }
+    </div>
+  )
+};
 
 Menu.propTypes = {
   isOpen: PropTypes.bool,

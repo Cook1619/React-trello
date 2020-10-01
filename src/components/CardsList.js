@@ -25,8 +25,6 @@ import Form from "./Form";
 class CardsList extends Component {
   constructor(props) {
     super(props);
-    // TODO: Bind your class methods here
-    // ...
     this.handleAddNewCard = this.handleAddNewCard.bind(this);
     this.handleCancelNewCard = this.handleCancelNewCard.bind(this);
     this.handleCreateNewCard = this.handleCreateNewCard.bind(this);
@@ -38,7 +36,6 @@ class CardsList extends Component {
     this.handleAddTag = this.handleAddTag.bind(this);
     this.renderCards = this.renderCards.bind(this);
 
-    // CardsList state
     this.state = {
       creatingNewCard: false,
       editCardId: null,
@@ -46,12 +43,14 @@ class CardsList extends Component {
       editCardTags: [],
     };
 
-    // TODO: Define all the card actions here
     this.actions = [
       [
         {
           title: "Add Card...",
-          onClick: () => null, // TODO
+          onClick: () => {
+            this.props.onToggleMenu(this.props.id);
+            this.setState({ creatingNewCard: true })
+          }, 
         },
         {
           title: "Copy List...",
@@ -145,28 +144,35 @@ class CardsList extends Component {
       <div className="cards-list-header">
         <div className="cards-list-title">
           <h3>{this.props.title}</h3>
-          {/* render the Menu component */}
+          <Menu 
+              actions={this.actions}
+              isOpen={this.props.isMenuOpen} 
+              onClick={() => this.props.onToggleMenu(this.props.id)}
+          />
         </div>
         <p>{this.props.cards.length} cards</p>
       </div>
     );
   }
 
-  // TODO: implement the renderCards method to render the cards.
-  // Tips:
-  // - Iterate through this.props.cards to render each Card
   renderCards() {
-    return this.props.cards.map((card, index) => (
-        <li key={card.id}>
-          <Card
-            id={card.id}
-            index={index}
-            number={card.number}
-            tags={card.tags}
-            description={card.description}
-          />
-        </li>
-    ));
+    return (
+      <ul className='cards'>
+      {
+        this.props.cards.map((card, index) => (
+          <li key={card.id}>
+            <Card
+              id={card.id}
+              index={index}
+              number={card.number}
+              tags={card.tags}
+              description={card.description}
+            />
+          </li>
+      ))
+      }
+      </ul>
+    )
   }
 
   // TODO: implement the renderFooter method to render the list footer UI.
