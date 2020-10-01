@@ -157,8 +157,7 @@ class CardsList extends Component {
   // - Iterate through this.props.cards to render each Card
   renderCards() {
     return this.props.cards.map((card, index) => (
-      <ul key={card.id}>
-        <li>
+        <li key={card.id}>
           <Card
             id={card.id}
             index={index}
@@ -167,7 +166,6 @@ class CardsList extends Component {
             description={card.description}
           />
         </li>
-      </ul>
     ));
   }
 
