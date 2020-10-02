@@ -5,31 +5,27 @@ import { IoIosMore as MenuIcon } from 'react-icons/io';
 // Components
 import Popover from './Popover';
 
-/*
- * TODO: Create the Menu component
- *
- * Requirements:
- * - Must be named Menu
- * - Must be a function component
- * - Should render a <div> element as the container for the menu content
- * - Should render an icon the user can click to open/close the menu
- * - Should render the lists of actions inside a Popover component if the menu is open
- * - The Popover component should be mounted only if the menu is open
- * - Each list of actions should be separated by an horizontal line (use a <hr> element)
- * 
- * Tips:
- * - You can use the 'menu' CSS class for styling
- * 
- */ 
-const Menu = ({ isOpen, onClick }) => {
+const Menu = ({ isOpen, onClick, actions }) => {
   return (
     <div className="menu">
       <MenuIcon onClick={onClick}/>
       {
         isOpen && (
-          <Popover />
-        )
-      }
+          <Popover onClickOutside={onClick}>
+          {actions.map((action, index) => (
+            <div key={index}>
+              <ul className="menu-items">
+                {action.map(({title, onClick}, i) => (
+                  <li className="menu-action" key={i} onClick={onClick}>
+                    {title}
+                  </li>
+                ))}
+              </ul>
+              <hr />
+            </div>
+          ))}
+          </Popover>
+        )}
     </div>
   )
 };

@@ -48,8 +48,6 @@ class CardsList extends Component {
         {
           title: "Add Card...",
           onClick: () => {
-            this.props.onToggleMenu(this.props.id);
-            this.setState({ creatingNewCard: true })
           }, 
         },
         {
@@ -139,6 +137,7 @@ class CardsList extends Component {
   // - Should render a h3 tag for the list title
   // - Should render a Menu component
   // - Should render the number of cards in the list
+
   renderHeader() {
     return (
       <div className="cards-list-header">
