@@ -65,13 +65,19 @@ class CardsList extends Component {
         },
         {
           title: "Archive All Cards in This List...",
-          onClick: () => null, // TODO
+          onClick: () => {
+            const { onRemoveAllCards, id } = this.props;
+            onRemoveAllCards(id)
+          }, 
         },
       ],
       [
         {
           title: "Archive This List",
-          onClick: () => null, // TODO
+          onClick: () => {
+            const { onRemoveList, id } = this.props;
+            onRemoveList(id)
+          },
         },
       ],
     ];

@@ -55,20 +55,22 @@ class Board extends Component {
   // - Reset the `newListText` and `creatingNewList` state values as well to cleanup and close the form
   handleAddList(title = "") {}
 
-  // TODO: implement the handleRemoveList method to remove a list from the board.
-  // Tips:
-  // - Delete all cards from the list
-  // - Delete list itself
-  // - Use the `this.setState` method to update the state (lists, cards, listOrder)
-  handleRemoveList(listId) {}
+  handleRemoveList(listId) {
+    const { lists, listOrder, cards } = this.state;
+    lists[listId].cardIds.map((id) => delete cards[id]);
+    delete lists[listId];
+    const index = listOrder.indexOf(listId);
+    if (index > -1) {
+      listOrder.splice(index, 1);
+    }
 
-  // TODO: implement the handleAddCard method to add a card to a list.
-  // Tips:
-  // - Check if the card description is not an empty string. Do not create the card otherwise
-  // - Use the `_generateId` function to generate a unique Id for the new card
-  // - Use the `_getNextNumber` function to get the new card number
-  // - Add the new card
-  // - Use the `this.setState` method to update the state (lists, cards)
+    this.setState({
+      lists,
+      cards,
+      listOrder,
+    });
+  }
+
   handleAddCard(listId, description = "") {
     if (description.trim()) {
       const { lists, cards } = this.state;
@@ -88,20 +90,28 @@ class Board extends Component {
     }
   }
 
-  // TODO: implement the handleRemoveCard method to remove a card from a list.
-  // Tips:
-  // - Delete card
-  // - Remove card Id from the corresponding list
-  // - Use the `this.setState` method to update the state (lists, cards)
-  handleRemoveCard(listId, cardId) {}
 
-  // TODO: implement the handleRemoveAllCards method to remove all cards from a list.
-  // Tips:
-  // - Delete all cards from the corresponding list
-  // - Remove card Ids from the list
-  // - Use the `this.setState` method to update the state (lists, cards, openMenuId)
-  // - Close the opened menu by reseting the openMenuId state value
-  handleRemoveAllCards(listId) {}
+  handleRemoveCard(listId, cardId) {
+    const { lists, cards } = this.state;
+    delete cards[cardId];
+    const cardIndex = lists[listId].cardIds.indexOf(cardId);
+    if (cardIndex > -1) {
+      lists[listId].cardIds.splice(cardIndex, 1);
+    }
+    this.setState({ lists, cards });
+  }
+
+  handleRemoveAllCards(listId) {
+    const { lists, cards } = this.state;
+    lists[listId].cardIds.map((id) => delete cards[id]);
+    lists[listId].cardIds = [];
+
+    this.setState({
+      lists,
+      cards,
+      openMenuId: null,
+    });
+  }
 
   // TODO: implement the handleCopyCard method to copy a card from a list to another.
   // Tips:
@@ -176,6 +186,8 @@ class Board extends Component {
                 isMenuOpen={this.state.openMenuId === listId}
                 onToggleMenu={this.handleToggleMenu}
                 onAddCard={this.handleAddCard}
+                onRemoveAllCards={this.handleRemoveAllCards}
+                onRemoveList={this.handleRemoveList}
               />
             </li>
           );
