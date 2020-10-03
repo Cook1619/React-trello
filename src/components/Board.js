@@ -12,7 +12,6 @@ class Board extends Component {
   constructor(props) {
     super(props);
 
-    // Board state
     this.state = {
       lists: {},
       cards: {},
@@ -22,8 +21,6 @@ class Board extends Component {
       openMenuId: null,
     };
 
-    // TODO: Bind your class methods here
-    // ...
     this.handleAddList = this.handleAddList.bind(this);
     this.handleRemoveList = this.handleRemoveList.bind(this);
     this.handleAddCard = this.handleAddCard.bind(this);
@@ -72,7 +69,24 @@ class Board extends Component {
   // - Use the `_getNextNumber` function to get the new card number
   // - Add the new card
   // - Use the `this.setState` method to update the state (lists, cards)
-  handleAddCard(listId, description = "") {}
+  handleAddCard(listId, description = "") {
+    if (description.trim()) {
+      const { lists, cards } = this.state;
+      const id = _generateId();
+      const number = _getNextNumber(cards);
+      cards[id] = {
+        id,
+        number,
+        description,
+        tags: [],
+      };
+      lists[listId].cardIds.push(id);
+      this.setState({
+        lists,
+        cards,
+      });
+    }
+  }
 
   // TODO: implement the handleRemoveCard method to remove a card from a list.
   // Tips:
@@ -121,7 +135,11 @@ class Board extends Component {
   // TODO: implement the handleToggleMenu method to toggle the corresponding list menu.
   // Tips:
   // - Use the `this.setState` method to update the state (openMenuId)
-  handleToggleMenu(listId) {}
+  handleToggleMenu(listId) {
+    this.setState({ 
+      openMenuId: this.state.openMenuId !== listId ? listId : null
+    })
+  }
 
   // TODO: implement the handleEditCard method to update the card description.
   // Tips:
@@ -155,6 +173,9 @@ class Board extends Component {
                 index={index}
                 title={list.title}
                 cards={cards}
+                isMenuOpen={this.state.openMenuId === listId}
+                onToggleMenu={this.handleToggleMenu}
+                onAddCard={this.handleAddCard}
               />
             </li>
           );

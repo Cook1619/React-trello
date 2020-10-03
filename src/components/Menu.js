@@ -11,7 +11,7 @@ const Menu = ({ isOpen, onClick, actions }) => {
       <MenuIcon onClick={onClick}/>
       {
         isOpen && (
-          <Popover onClickOutside={onClick}>
+          <Popover onClickOutside={onClick} title="List of Actions">
           {actions.map((action, index) => (
             <div key={index}>
               <ul className="menu-items">

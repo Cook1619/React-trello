@@ -48,6 +48,9 @@ class CardsList extends Component {
         {
           title: "Add Card...",
           onClick: () => {
+            const { onToggleMenu, id } = this.props;
+            onToggleMenu(id);
+            this.setState({ creatingNewCard: true })
           }, 
         },
         {
@@ -78,7 +81,10 @@ class CardsList extends Component {
   // Tips:
   // - Call the `this.props.onAddCard` function to add a new card
   // - Use the `this.setState` method to update the state in order to close the card creation form
-  handleAddNewCard(cardText = "") {}
+  handleAddNewCard(cardText = "") {
+    const { id, onAddCard } = this.props;
+    cardText ? onAddCard(id, cardText) : this.handleCancelNewCard();
+  }
 
   // TODO: implement the handleCancelNewCard method.
   // Tips:
@@ -139,17 +145,18 @@ class CardsList extends Component {
   // - Should render the number of cards in the list
 
   renderHeader() {
+    const { title, isMenuOpen, cards, onToggleMenu, id } = this.props
     return (
       <div className="cards-list-header">
         <div className="cards-list-title">
-          <h3>{this.props.title}</h3>
+          <h3>{title}</h3>
           <Menu 
               actions={this.actions}
-              isOpen={this.props.isMenuOpen} 
-              onClick={() => this.props.onToggleMenu(this.props.id)}
+              isOpen={isMenuOpen} 
+              onClick={() => onToggleMenu(id)}
           />
         </div>
-        <p>{this.props.cards.length} cards</p>
+        <p>{cards.length} cards</p>
       </div>
     );
   }
