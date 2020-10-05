@@ -72,6 +72,7 @@ class Board extends Component {
   }
 
   handleAddCard(listId, description = "") {
+    console.log(listId)
     if (description.trim()) {
       const { lists, cards } = this.state;
       const id = _generateId();

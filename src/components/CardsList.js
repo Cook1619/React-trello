@@ -50,7 +50,7 @@ class CardsList extends Component {
           onClick: () => {
             const { onToggleMenu, id } = this.props;
             onToggleMenu(id);
-            this.setState({ creatingNewCard: true })
+            this.setState({ creatingNewCard: true });
           }, 
         },
         {
@@ -89,7 +89,10 @@ class CardsList extends Component {
   // - Use the `this.setState` method to update the state in order to close the card creation form
   handleAddNewCard(cardText = "") {
     const { id, onAddCard } = this.props;
-    cardText ? onAddCard(id, cardText) : this.handleCancelNewCard();
+    if (cardText){
+      onAddCard(id, cardText)
+    }
+    this.handleCancelNewCard();
   }
 
   // TODO: implement the handleCancelNewCard method.
