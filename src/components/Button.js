@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Button = ({ text }) => (
-  <button className="btn btn-success">
+const Button = ({ text, onClick, variant }) => (
+  <button className={`btn btn-${variant}`} onClick={onClick}>
     <span>{text}</span>
   </button>
 );

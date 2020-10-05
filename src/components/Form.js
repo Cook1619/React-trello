@@ -62,6 +62,7 @@ class Form extends Component {
   // - Call the `this.props.onClickSubmit` method to submit the text
   // - Clean up the control form value using `this.setState`
   handleOnSubmit(event) {
+    console.log('event', event)
     event.preventDefault();
     this.props.onClickSubmit(this.state.text);
     this.setState({ text: "" });
@@ -100,7 +101,8 @@ class Form extends Component {
         <div className="form-actions">
           <Button 
             text={this.props.buttonText} 
-            onClick={this.handleOnSubmit} 
+            onClick={this.handleOnSubmit}
+            variant="success"
             />
           {this.props.onClickCancel && (
             <CancelIcon
