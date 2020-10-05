@@ -98,7 +98,10 @@ class Form extends Component {
           />
         )}
         <div className="form-actions">
-          <Button text={this.props.buttonText} onClick={this.handleOnSubmit} />
+          <Button 
+            text={this.props.buttonText} 
+            onClick={this.handleOnSubmit} 
+            />
           {this.props.onClickCancel && (
             <CancelIcon
               className="form-cancel-action"

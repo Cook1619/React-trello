@@ -88,8 +88,10 @@ class CardsList extends Component {
   // - Call the `this.props.onAddCard` function to add a new card
   // - Use the `this.setState` method to update the state in order to close the card creation form
   handleAddNewCard(cardText = "") {
+    console.log('does this run')
     const { id, onAddCard } = this.props;
     if (cardText){
+      console.log('HELLLLLO')
       onAddCard(id, cardText)
     }
     this.handleCancelNewCard();
