@@ -177,15 +177,21 @@ class Board extends Component {
     });
   }
 
-  // TODO: implement the handleRemoveTag method to remove a tag from a card.
-  // Tips:
-  // - Use the `this.setState` method to update the state (cards)
-  handleRemoveTag(cardId, tagId) {}
+  handleRemoveTag(cardId, tagId) {
+    let cards = {...this.state.cards};
+    if (cards[cardId]) {
+      cards[cardId].tags.splice(tagId, 1);
+    }
+    this.setState({ cards});
+  }
 
-  // TODO: implement the handleAddTag method to add a tag to a card.
-  // Tips:
-  // - Use the `this.setState` method to update the state (cards)
-  handleAddTag(cardId, text = "") {}
+  handleAddTag(cardId, text = '') {
+    let cards = {...this.state.cards};
+    if (cards[cardId]) {
+      cards[cardId].tags.push(text);
+    }
+    this.setState({ cards });
+  }
 
   // TODO: implement the renderLists method to render the board lists UI.
   // Tips:
@@ -213,6 +219,8 @@ class Board extends Component {
                 onCopyList={this.handleCopyList}
                 onMoveAllCards={this.handleMoveAllCards}
                 onEditCard={this.handleEditCard}
+                onRemoveTag={this.handleRemoveTag}
+                onAddTag={this.handleAddTag}
               />
             </li>
           );

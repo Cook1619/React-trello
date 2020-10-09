@@ -102,27 +102,20 @@ class CardsList extends Component {
   // - Call the `this.props.onRemoveCard` function to remove a card form the list
   // - Do not forget to reset and close the editing form
   handleArchiveCard() {}
-  
   handleSaveCard(text) {
     this.props.onEditCard(this.state.editCardId, text);
     this.handleCancelEdit();
   }
 
-  // TODO: implement the handleRemoveTag method.
-  // Tips:
-  // - Call the `this.props.onRemoveTag` function to remove a tag from a card
-  handleRemoveTag(tagId) {}
+  handleRemoveTag(tagId) {
+    this.props.onRemoveTag(this.state.editCardId, tagId);
+  }
 
-  // TODO: implement the handleAddTag method.
-  // Tips:
-  // - Call the `this.props.onAddTag` function to add a tag to a card
-  handleAddTag(text) {}
-
-  // TODO: implement the renderHeader method to render the list header UI.
-  // Tips:
-  // - Should render a h3 tag for the list title
-  // - Should render a Menu component
-  // - Should render the number of cards in the list
+  handleAddTag(text) {
+    if (text) {
+      this.props.onAddTag(this.state.editCardId, text);
+    }
+  }
 
   renderHeader() {
     const { title, isMenuOpen, cards, onToggleMenu, id } = this.props
@@ -192,7 +185,19 @@ class CardsList extends Component {
         {this.renderHeader()}
         {this.renderCards()}
         {this.renderFooter()}
-        {/* render card editor */}
+        { 
+              this.state.editCardId && 
+              <CardEditor 
+                initialValue={this.state.editCardText}
+                tags={this.state.editCardTags}
+                onCopyCard={this.handleCopyCard}
+                onArchiveCard={this.handleArchiveCard}
+                onSaveCard={this.handleSaveCard}
+                onCancelEdit={this.handleCancelEdit}
+                onRemoveTag={this.handleRemoveTag}
+                onAddTag={this.handleAddTag}
+              /> 
+            }
       </div>
     );
   }
