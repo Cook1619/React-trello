@@ -102,12 +102,11 @@ class CardsList extends Component {
   // - Call the `this.props.onRemoveCard` function to remove a card form the list
   // - Do not forget to reset and close the editing form
   handleArchiveCard() {}
-
-  // TODO: implement the handleSaveCard method.
-  // Tips:
-  // - Call the `this.props.onEditCard` function to save changes on the card
-  // - Do not forget to reset and close the editing form
-  handleSaveCard(text) {}
+  
+  handleSaveCard(text) {
+    this.props.onEditCard(this.state.editCardId, text);
+    this.handleCancelEdit();
+  }
 
   // TODO: implement the handleRemoveTag method.
   // Tips:

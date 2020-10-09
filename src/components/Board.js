@@ -118,7 +118,6 @@ class Board extends Component {
     let cards = {...this.state.cards};
     let listOrder = [...this.state.listOrder];
     let cardIds = [];
-    // Copy all cards from list to copy
     for (let i = 0; i < lists[listId].cardIds.length; i++) {
       const id = _generateId();
       const number = _getNextNumber(cards);
@@ -126,11 +125,9 @@ class Board extends Component {
       cardIds.push(id);
       cards[id] = { id, number, description: cards[cardId].description, tags: [...cards[cardId].tags] };
     }
-    // Copy list with Ids for the new copy cards
     const id = _generateId();
     lists[id] = { id, title: '(Copy) - ' + lists[listId].title, cardIds };
     listOrder.push(id);
-    // Update state
     this.setState({ cards, lists, listOrder, openMenuId: null });
   }
 
@@ -149,7 +146,6 @@ class Board extends Component {
     const id = _generateId();
     lists[id] = { id, title: '(Copy) - ' + lists[listId].title, cardIds };
     listOrder.push(id);
-    // Update state
     this.setState({ cards, lists, listOrder, openMenuId: null });
   }
 
@@ -173,10 +169,13 @@ class Board extends Component {
     })
   }
 
-  // TODO: implement the handleEditCard method to update the card description.
-  // Tips:
-  // - Use the `this.setState` method to update the state (cards)
-  handleEditCard(cardId, description = "") {}
+  handleEditCard(cardId, description = "") {
+    const { cards } = this.state;
+    cards[cardId].description = description;
+    this.setState({
+      cards,
+    });
+  }
 
   // TODO: implement the handleRemoveTag method to remove a tag from a card.
   // Tips:
@@ -213,6 +212,7 @@ class Board extends Component {
                 onCopyCard={this.handleCopyCard}
                 onCopyList={this.handleCopyList}
                 onMoveAllCards={this.handleMoveAllCards}
+                onEditCard={this.handleEditCard}
               />
             </li>
           );
