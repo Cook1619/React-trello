@@ -8,20 +8,6 @@ import CardEditor from "./CardEditor";
 import Menu from "./Menu";
 import Form from "./Form";
 
-/*
- * TODO: Create the CardsList component
- *
- * Requirements:
- * - Must be named CardsList
- * - Must be a class component
- * - Should render a <div> element as the container for the card
- * - Should render the tags list at the top of the card content
- * - Should render the card number and description below the tags
- *
- * Tips:
- * - You can use the 'card' CSS class for styling
- *
- */
 class CardsList extends Component {
   constructor(props) {
     super(props);
@@ -55,13 +41,13 @@ class CardsList extends Component {
         },
         {
           title: "Copy List...",
-          onClick: () => null, // TODO
+          onClick: () => this.props.onCopyList(this.props.id)
         },
       ],
       [
         {
           title: "Move All Cards in This List...",
-          onClick: () => null, // TODO
+          onClick: () => this.props.onMoveAllCards(this.props.id)
         },
         {
           title: "Archive All Cards in This List...",
@@ -83,49 +69,33 @@ class CardsList extends Component {
     ];
   }
 
-  // TODO: implement the handleAddNewCard method to add a new card to the list.
-  // Tips:
-  // - Call the `this.props.onAddCard` function to add a new card
-  // - Use the `this.setState` method to update the state in order to close the card creation form
   handleAddNewCard(cardText = "") {
-    console.log('does this run')
     const { id, onAddCard } = this.props;
     if (cardText){
-      console.log('HELLLLLO')
       onAddCard(id, cardText)
     }
     this.handleCancelNewCard();
   }
 
-  // TODO: implement the handleCancelNewCard method.
-  // Tips:
-  // - Use the `this.setState` method to update the state in order to close the card creation form
   handleCancelNewCard() {
     this.setState({ creatingNewCard: false });
   }
 
-  // TODO: implement the handleCreateNewCard method.
-  // Tips:
-  // - Use the `this.setState` method to update the state in order to open the card creation form
   handleCreateNewCard() {
     this.setState({ creatingNewCard: true });
   }
 
-  // TODO: implement the handleEditCard method.
-  // Tips:
-  // - Use the `this.setState` method to update the text and tags values of the editing from
   handleEditCard(id, text, tags) {}
 
-  // TODO: implement the handleCancelEdit method.
-  // Tips:
-  // - Use the `this.setState` method to reset and close the editing form
-  handleCancelEdit() {}
 
-  // TODO: implement the handleCopyCard method.
-  // Tips:
-  // - Call the `this.props.onCopyCard` function to clone a card
-  // - Do not forget to reset and close the editing form
-  handleCopyCard() {}
+  handleCancelEdit() {
+    this.setState({ editCardId: null, editCardText: "", editCardTags: [] });
+  }
+
+  handleCopyCard() {
+    this.props.onCopyCard(this.props.id, this.state.editCardId);
+    this.handleCancelEdit();
+  }
 
   // TODO: implement the handleArchiveCard method.
   // Tips:

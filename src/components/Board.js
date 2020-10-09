@@ -113,38 +113,60 @@ class Board extends Component {
     });
   }
 
-  // TODO: implement the handleCopyCard method to copy a card from a list to another.
-  // Tips:
-  // - Create card copy
-  // - Use the `_generateId` function to generate a unique Id for the new card
-  // - Use the `_getNextNumber` function to get the new card number
-  // - Add it to the list
-  // - Use the `this.setState` method to update the state (lists, cards)
-  handleCopyCard(listId, cardId) {}
+  handleCopyCard(listId, cardId) {
+    let lists = {...this.state.lists};
+    let cards = {...this.state.cards};
+    let listOrder = [...this.state.listOrder];
+    let cardIds = [];
+    // Copy all cards from list to copy
+    for (let i = 0; i < lists[listId].cardIds.length; i++) {
+      const id = _generateId();
+      const number = _getNextNumber(cards);
+      const cardId = lists[listId].cardIds[i];
+      cardIds.push(id);
+      cards[id] = { id, number, description: cards[cardId].description, tags: [...cards[cardId].tags] };
+    }
+    // Copy list with Ids for the new copy cards
+    const id = _generateId();
+    lists[id] = { id, title: '(Copy) - ' + lists[listId].title, cardIds };
+    listOrder.push(id);
+    // Update state
+    this.setState({ cards, lists, listOrder, openMenuId: null });
+  }
 
-  // TODO: implement the handleCopyList method to clone an entire list.
-  // Tips:
-  // - Copy all cards from list to clone
-  // - Use the `_generateId` function to generate a unique Id for every cloned cards
-  // - Use the `_getNextNumber` function to get a new card number for every cloned cards
-  // - Create a new list and add all the cloned cards
-  // - Use the `_generateId` function to generate a unique Id for the new list
-  // - Edit the new list title to append '(Copy) - ' to it
-  // - Use the `this.setState` method to update the state (lists, cards, listOrder, openMenuId)
-  // - Close the opened menu by reseting the openMenuId state value
-  handleCopyList(listId) {}
+  handleCopyList(listId) {
+    let lists = {...this.state.lists};
+    let cards = {...this.state.cards};
+    let listOrder = [...this.state.listOrder];
+    let cardIds = [];
+    for (let i = 0; i < lists[listId].cardIds.length; i++) {
+      const id = _generateId();
+      const number = _getNextNumber(cards);
+      const cardId = lists[listId].cardIds[i];
+      cardIds.push(id);
+      cards[id] = { id, number, description: cards[cardId].description, tags: [...cards[cardId].tags] };
+    }
+    const id = _generateId();
+    lists[id] = { id, title: '(Copy) - ' + lists[listId].title, cardIds };
+    listOrder.push(id);
+    // Update state
+    this.setState({ cards, lists, listOrder, openMenuId: null });
+  }
 
-  // TODO: implement the handleMoveAllCards method to move all cards to a list.
-  // Tips:
-  // - Update all the lists
-  // - The target list should get all the cards. The other lists should be emptied
-  // - Use the `this.setState` method to update the state (lists, openMenuId)
-  // - Close the opened menu by reseting the openMenuId state value
-  handleMoveAllCards(listId) {}
 
-  // TODO: implement the handleToggleMenu method to toggle the corresponding list menu.
-  // Tips:
-  // - Use the `this.setState` method to update the state (openMenuId)
+  handleMoveAllCards(listId) {
+    let lists = {...this.state.lists};
+    let cardIds = [];
+    for (let id in lists) {
+      if (id !== listId) {
+        cardIds.push(...lists[id].cardIds);
+        lists[id].cardIds = [];
+      }
+    }
+    lists[listId].cardIds.push(...cardIds);
+    this.setState({ lists, openMenuId: null });
+  }
+
   handleToggleMenu(listId) {
     this.setState({ 
       openMenuId: this.state.openMenuId !== listId ? listId : null
@@ -188,6 +210,9 @@ class Board extends Component {
                 onAddCard={this.handleAddCard}
                 onRemoveAllCards={this.handleRemoveAllCards}
                 onRemoveList={this.handleRemoveList}
+                onCopyCard={this.handleCopyCard}
+                onCopyList={this.handleCopyList}
+                onMoveAllCards={this.handleMoveAllCards}
               />
             </li>
           );
