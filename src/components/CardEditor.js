@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useClickOutsideEffect } from '../hooks';
 // Icons
 import { 
   IoMdCopy as CopyIcon, 
@@ -7,61 +8,123 @@ import {
   IoMdCreate as EditIcon,
   IoMdClose as RemoveIcon  
 } from 'react-icons/io';
-// Components
+
 import Button from './Button';
 import Form from './Form';
 import Popover from './Popover';
 import Tag from './Tag';
 
-/*
- * TODO: Create the CardEditor component
- *
- * Requirements:
- * - Must be named CardEditor
- * - Must be a class component
- * - Should render a Form component to edit the card description (that contain a textarea and a submit button)
- * - Should render a list of buttons for all editing actions (edit labels, copy, archive)
- * - Should render a Popover component for displaying the label editing form:
- *    - Should render the list of tags
- *    - Should render an icon next to each tag to let the user remove each tag individually
- *    - Should render a Form component to add a new tag (that contain an input and a submit button)
- * 
- * Tips:
- * - You can use the 'editor-modal' and 'editor-actions' CSS classes for styling
- * 
- */ 
-class CardEditor extends Component {
-  constructor(props) {
-    super(props);
+const CardEditor = ({initialValue, tags, position, onSaveCard, onRemoveTag, onArchiveCard, onCopyCard, onCancelEdit, onAddTag}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-    // TODO: Define your state properties here
-    this.state = {}
-  }
+  const editor = React.createRef();
 
-  // TODO: render the CardEditor UI.
-  render() {
-    return (
-      <div className="editor-modal">
+  useClickOutsideEffect(editor, onCancelEdit);
+
+  return (
+    <div className="editor-modal">
+      <div
+        ref={editor}
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          position: "absolute",
+          top: `${position?.top ?? 0}px`,
+          left: `${position?.left ?? 0}px`
+        }}
+      >
         <div
           style={{
             display: "flex",
-            flexDirection: "row",
-            position: "absolute",
-            top: `${this.props?.position?.top ?? 0}px`,
-            left: `${this.props?.position?.left ?? 0}px`
+            flexDirection: "column"
           }}
         >
-          <div>
-            <Form />
-          </div>
-          <ul className="editor-actions">
-            { /* render editor actions */ }
-            { /* render tags editing form */ }
-          </ul>
+          <Form 
+            type='editor'
+            buttonText="Save"
+            initialValue={initialValue}
+            onClickSubmit={onSaveCard}
+          >
+            {
+              tags && tags.length > 0 &&
+              <div
+                style={{
+                  padding: "10px 10px 0 10px"
+                }}
+              >
+              {
+                tags.map((tag, i) => (
+                  <Tag key={i} text={tag} />
+                ))
+              }
+              </div>
+            }
+          </Form>
         </div>
+        <ul className="editor-actions">
+          <li className="editor-action">
+            <Button 
+              icon={<EditIcon />}
+              text="Edit Labels" 
+              type="editor"
+              onClick={() => setIsOpen(true)}
+            />
+            {
+              isOpen && (
+                <Popover
+                  title="Labels"
+                  offset={{ top: -35 }}
+                  onClickOutside={() => setIsOpen(false)}
+                >
+                {
+                  <div>
+                    <ul className="labels">
+                      {
+                        tags.map((tag, i) => (
+                          <li
+                            key={i}
+                            className="label"
+                            onClick={() => onRemoveTag(i)}
+                          >
+                            <RemoveIcon />
+                            <p>{tag}</p>
+                          </li>
+                        )) 
+                      } 
+                    </ul>
+                    <h4 className="new-label-title">Add a new label</h4>
+                    <Form 
+                      type="labels"
+                      buttonText="Add"
+                      placeholder="Enter a name for this label..."
+                      onClickSubmit={onAddTag}
+                    />
+                  </div>
+                }
+                </Popover>
+              )
+            }
+          </li>
+          <li className="editor-action">
+            <Button 
+              icon={<CopyIcon />}
+              text="Copy" 
+              type="editor"
+              onClick={onCopyCard}
+            />
+          </li>
+          <li className="editor-action">
+            <Button 
+              icon={<ArchiveIcon />}
+              text="Archive"
+              type="editor"
+              onClick={onArchiveCard}
+            />
+          </li>
+        </ul>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 CardEditor.defaultProps = {

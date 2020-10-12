@@ -196,6 +196,10 @@ class CardsList extends Component {
                 onCancelEdit={this.handleCancelEdit}
                 onRemoveTag={this.handleRemoveTag}
                 onAddTag={this.handleAddTag}
+                position={{
+                  top: this.cardRefs[this.state.editCardId].getBoundingClientRect().top,
+                  left: this.cardRefs[this.state.editCardId].getBoundingClientRect().left 
+                }}
               /> 
             }
       </div>

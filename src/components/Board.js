@@ -35,9 +35,6 @@ class Board extends Component {
     this.handleAddTag = this.handleAddTag.bind(this);
   }
 
-  // TODO: implement the componentDidMount lifecycle method to fetch data and init the component state.
-  // Tips:
-  // - Use the `this.setState` method to update the component state
   componentDidMount() {
     this.setState({
       cards: data.cards,
@@ -46,14 +43,22 @@ class Board extends Component {
     });
   }
 
-  // TODO: implement the handleAddList method to add a new list to the board.
-  // Tips:
-  // - Check if the list title is not an empty string. Do not create the list otherwise
-  // - Use the `_generateId` function to generate a unique Id for the new list
-  // - Add the new list
-  // - Use the `this.setState` method to update the state (lists, listOrder, newListText, creatingNewList)
-  // - Reset the `newListText` and `creatingNewList` state values as well to cleanup and close the form
-  handleAddList(title = "") {}
+  handleAddList(title = "") {
+    if (title.trim()) {
+      const id = _generateId();
+      const { lists, listOrder } = this.state;
+      lists[id] = { id, title, cardIds: [] };
+      listOrder.push(id);
+      this.setState({
+        lists,
+        listOrder,
+        newListText: "",
+        creatingNewList: false,
+      });
+    } else {
+      this.setState({ newListText: "", creatingNewList: false });
+    }
+  }
 
   handleRemoveList(listId) {
     const { lists, listOrder, cards } = this.state;
@@ -229,18 +234,32 @@ class Board extends Component {
     );
   }
 
-  // TODO: implement the renderNewList method to render the list creation form.
-  // Tips:
-  // - Render a Form component in creation mode to let the user enter the new list title
-  // - Otherwise, render a button to trigger the creation mode (creatingNewList)
-  renderNewList() {}
+  renderNewList() {
+    return this.state.creatingNewList ? (
+      <Form
+        type="list"
+        placeholder="Enter a title for this list..."
+        buttonText="Add List"
+        onClickSubmit={this.handleAddList}
+        onClickCancel={() => this.setState({ creatingNewList: false })}
+      ></Form>
+    ) : (
+      <button
+        className="add-button"
+        onClick={() => this.setState({ creatingNewList: true })}
+      >
+        <AddIcon />
+        <p>Add a new list</p>
+      </button>
+    );
+  }
 
   // TODO: render the Board UI.
   render() {
     return (
       <div className="board">
         {this.renderLists()}
-        <Form type="editor" />
+        {this.renderNewList()}
       </div>
     );
   }
