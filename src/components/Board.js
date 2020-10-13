@@ -198,10 +198,6 @@ class Board extends Component {
     this.setState({ cards });
   }
 
-  // TODO: implement the renderLists method to render the board lists UI.
-  // Tips:
-  // - Iterate through the listOrder state array to render each list of cards (CardsList)
-  // - Pass the necessary methods to the CardsList component to handle all actions
   renderLists() {
     return (
       <div className="board-lists">
@@ -254,7 +250,6 @@ class Board extends Component {
     );
   }
 
-  // TODO: render the Board UI.
   render() {
     return (
       <div className="board">

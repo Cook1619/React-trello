@@ -22,6 +22,8 @@ class CardsList extends Component {
     this.handleAddTag = this.handleAddTag.bind(this);
     this.renderCards = this.renderCards.bind(this);
 
+    this.cardRefs = {};
+
     this.state = {
       creatingNewCard: false,
       editCardId: null,
@@ -85,8 +87,9 @@ class CardsList extends Component {
     this.setState({ creatingNewCard: true });
   }
 
-  handleEditCard(id, text, tags) {}
-
+  handleEditCard(id, text, tags) {
+    this.setState({ editCardId: id, editCardText: text, editCardTags: tags });
+  }
 
   handleCancelEdit() {
     this.setState({ editCardId: null, editCardText: "", editCardTags: [] });
@@ -97,11 +100,10 @@ class CardsList extends Component {
     this.handleCancelEdit();
   }
 
-  // TODO: implement the handleArchiveCard method.
-  // Tips:
-  // - Call the `this.props.onRemoveCard` function to remove a card form the list
-  // - Do not forget to reset and close the editing form
-  handleArchiveCard() {}
+  handleArchiveCard() {
+    this.props.onRemoveCard(this.props.id, this.state.editCardId);
+    this.handleCancelEdit();
+  }
   handleSaveCard(text) {
     this.props.onEditCard(this.state.editCardId, text);
     this.handleCancelEdit();
@@ -109,6 +111,12 @@ class CardsList extends Component {
 
   handleRemoveTag(tagId) {
     this.props.onRemoveTag(this.state.editCardId, tagId);
+  }
+
+  handleCardRef(node, id) {
+    if (node) {
+      this.cardRefs[id] = node;
+    }
   }
 
   handleAddTag(text) {
@@ -139,7 +147,10 @@ class CardsList extends Component {
       <ul className='cards'>
       {
         this.props.cards.map((card, index) => (
-          <li key={card.id}>
+          <li key={card.id}
+          ref={(node) => this.handleCardRef(node, card.id)}
+          onClick={() => this.handleEditCard(card.id, card.description, card.tags)}
+          >
             <Card
               id={card.id}
               index={index}
@@ -154,10 +165,6 @@ class CardsList extends Component {
     )
   }
 
-  // TODO: implement the renderFooter method to render the list footer UI.
-  // Tips:
-  // - Should render either a Form component to create a new card
-  // or a button to trigger the card creation mode (creatingNewCard)
   renderFooter() {
     return this.state.creatingNewCard ? (
       <Form
@@ -186,22 +193,22 @@ class CardsList extends Component {
         {this.renderCards()}
         {this.renderFooter()}
         { 
-              this.state.editCardId && 
-              <CardEditor 
-                initialValue={this.state.editCardText}
-                tags={this.state.editCardTags}
-                onCopyCard={this.handleCopyCard}
-                onArchiveCard={this.handleArchiveCard}
-                onSaveCard={this.handleSaveCard}
-                onCancelEdit={this.handleCancelEdit}
-                onRemoveTag={this.handleRemoveTag}
-                onAddTag={this.handleAddTag}
-                position={{
-                  top: this.cardRefs[this.state.editCardId].getBoundingClientRect().top,
-                  left: this.cardRefs[this.state.editCardId].getBoundingClientRect().left 
-                }}
-              /> 
-            }
+          this.state.editCardId && 
+          <CardEditor 
+            initialValue={this.state.editCardText}
+            tags={this.state.editCardTags}
+            onCopyCard={this.handleCopyCard}
+            onArchiveCard={this.handleArchiveCard}
+            onSaveCard={this.handleSaveCard}
+            onCancelEdit={this.handleCancelEdit}
+            onRemoveTag={this.handleRemoveTag}
+            onAddTag={this.handleAddTag}
+            position={{
+              top: this.cardRefs[this.state.editCardId].getBoundingClientRect().top,
+              left: this.cardRefs[this.state.editCardId].getBoundingClientRect().left 
+            }}
+          /> 
+      }
       </div>
     );
   }
