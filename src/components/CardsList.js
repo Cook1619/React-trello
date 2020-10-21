@@ -96,6 +96,7 @@ class CardsList extends Component {
   }
 
   handleCopyCard() {
+    console.log('on copy card')
     this.props.onCopyCard(this.props.id, this.state.editCardId);
     this.handleCancelEdit();
   }

@@ -121,20 +121,13 @@ class Board extends Component {
   handleCopyCard(listId, cardId) {
     let lists = {...this.state.lists};
     let cards = {...this.state.cards};
-    let listOrder = [...this.state.listOrder];
-    let cardIds = [];
-    for (let i = 0; i < lists[listId].cardIds.length; i++) {
-      const id = _generateId();
-      const number = _getNextNumber(cards);
-      const cardId = lists[listId].cardIds[i];
-      cardIds.push(id);
-      cards[id] = { id, number, description: cards[cardId].description, tags: [...cards[cardId].tags] };
-    }
     const id = _generateId();
-    lists[id] = { id, title: '(Copy) - ' + lists[listId].title, cardIds };
-    listOrder.push(id);
-    this.setState({ cards, lists, listOrder, openMenuId: null });
+    const number = _getNextNumber(cards);
+    cards[id] = { id, number, description: cards[cardId].description, tags: [...cards[cardId].tags] };
+    lists[listId].cardIds.push(id);
+    this.setState({ cards, lists });
   }
+
 
   handleCopyList(listId) {
     let lists = {...this.state.lists};
@@ -215,6 +208,7 @@ class Board extends Component {
                 onToggleMenu={this.handleToggleMenu}
                 onAddCard={this.handleAddCard}
                 onRemoveAllCards={this.handleRemoveAllCards}
+                onRemoveCard={this.handleRemoveCard}
                 onRemoveList={this.handleRemoveList}
                 onCopyCard={this.handleCopyCard}
                 onCopyList={this.handleCopyList}
