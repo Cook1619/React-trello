@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { _getNextNumber, _generateId } from "../utils";
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 // Icons
 import { IoMdAdd as AddIcon } from "react-icons/io";
 // Components
@@ -191,36 +192,78 @@ class Board extends Component {
     this.setState({ cards });
   }
 
+  handleDragEnd({ destination, source, draggableId, type }) {
+    if (!destination) {
+      return;
+    }
+
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    if (type === "list") {
+      const { listOrder } = this.state;
+      listOrder.splice(source.index, 1);
+      listOrder.splice(destination.index, 0, draggableId);
+      this.setState({ listOrder });
+    }
+    if (type === "card") {
+      const lists = {...this.state.lists};
+      lists[source.droppableId].cardIds.splice(source.index, 1);
+      lists[destination.droppableId].cardIds.splice(destination.index, 0, draggableId);
+      this.setState({ lists });
+    }
+  }
+
   renderLists() {
+    const { listOrder, lists, cards } = this.state;
     return (
-      <div className="board-lists">
-        {this.state.listOrder.map((listId, index) => {
-          const list = this.state.lists[listId];
-          const cards = list.cardIds.map((key) => this.state.cards[key]);
-          return (
-            <li key={list.id}>
-              <CardsList
-                id={list.id}
-                index={index}
-                title={list.title}
-                cards={cards}
-                isMenuOpen={this.state.openMenuId === listId}
-                onToggleMenu={this.handleToggleMenu}
-                onAddCard={this.handleAddCard}
-                onRemoveAllCards={this.handleRemoveAllCards}
-                onRemoveCard={this.handleRemoveCard}
-                onRemoveList={this.handleRemoveList}
-                onCopyCard={this.handleCopyCard}
-                onCopyList={this.handleCopyList}
-                onMoveAllCards={this.handleMoveAllCards}
-                onEditCard={this.handleEditCard}
-                onRemoveTag={this.handleRemoveTag}
-                onAddTag={this.handleAddTag}
-              />
-            </li>
-          );
-        })}
-      </div>
+      <Droppable
+        droppableId="droppable-lists"
+        direction="horizontal"
+        type="list"
+      >
+        {(provided) => (
+          <ul
+            className="board-lists"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {/* render the lists */}
+            {listOrder.map((listId, index) => {
+              const orderCards = lists[listId].cardIds.map(
+                (cardId) => cards[cardId]
+              );
+              return (
+                <li key={listId}>
+                  <CardsList
+                    id={listId}
+                    index={index}
+                    title={lists[listId].title}
+                    cards={orderCards}
+                    isMenuOpen={this.state.openMenuId === listId}
+                    onToggleMenu={this.handleToggleMenu}
+                    onAddCard={this.handleAddCard}
+                    onRemoveCard={this.handleRemoveCard}
+                    onRemoveList={this.handleRemoveList}
+                    onRemoveAllCards={this.handleRemoveAllCards}
+                    onCopyList={this.handleCopyList}
+                    onMoveAllCards={this.handleMoveAllCards}
+                    onCopyCard={this.handleCopyCard}
+                    onEditCard={this.handleEditCard}
+                    onRemoveTag={this.handleRemoveTag}
+                    onAddTag={this.handleAddTag}
+                  />
+                </li>
+              );
+            })}
+            {provided.placeholder}
+          </ul>
+        )}
+      </Droppable>
     );
   }
 
