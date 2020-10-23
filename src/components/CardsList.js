@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Droppable, Draggable } from 'react-beautiful-dnd';
 // Icons
 import { IoMdAdd as AddIcon } from "react-icons/io";
 // Components
@@ -126,10 +127,11 @@ class CardsList extends Component {
     }
   }
 
-  renderHeader() {
+  renderHeader(provided) {
     const { title, isMenuOpen, cards, onToggleMenu, id } = this.props
     return (
-      <div className="cards-list-header">
+      <div className="cards-list-header"
+      {...provided.dragHandleProps}>
         <div className="cards-list-title">
           <h3>{title}</h3>
           <Menu 
@@ -145,24 +147,30 @@ class CardsList extends Component {
 
   renderCards() {
     return (
-      <ul className='cards'>
-      {
-        this.props.cards.map((card, index) => (
-          <li key={card.id}
-          ref={(node) => this.handleCardRef(node, card.id)}
-          onClick={() => this.handleEditCard(card.id, card.description, card.tags)}
-          >
-            <Card
-              id={card.id}
-              index={index}
-              number={card.number}
-              tags={card.tags}
-              description={card.description}
-            />
-          </li>
-      ))
-      }
-      </ul>
+      <Droppable droppableId={this.props.id} type="card" direction="vertical">
+        {(provided) => (
+          <ul className='cards'
+              ref={provided.innerRef}
+              {...provided.droppableProps}>
+          {
+            this.props.cards.map((card, index) => (
+              <li key={card.id}
+              ref={(node) => this.handleCardRef(node, card.id)}
+              onClick={() => this.handleEditCard(card.id, card.description, card.tags)}
+              >
+                <Card
+                  id={card.id}
+                  index={index}
+                  number={card.number}
+                  tags={card.tags}
+                  description={card.description}
+                />
+              </li>
+            )
+          )}
+          </ul>
+        )}
+      </Droppable>
     )
   }
 
@@ -189,28 +197,36 @@ class CardsList extends Component {
   // TODO: render the CardsList UI.
   render() {
     return (
-      <div className="cards-list">
-        {this.renderHeader()}
-        {this.renderCards()}
-        {this.renderFooter()}
-        { 
-          this.state.editCardId && 
-          <CardEditor 
-            initialValue={this.state.editCardText}
-            tags={this.state.editCardTags}
-            onCopyCard={this.handleCopyCard}
-            onArchiveCard={this.handleArchiveCard}
-            onSaveCard={this.handleSaveCard}
-            onCancelEdit={this.handleCancelEdit}
-            onRemoveTag={this.handleRemoveTag}
-            onAddTag={this.handleAddTag}
-            position={{
-              top: this.cardRefs[this.state.editCardId].getBoundingClientRect().top,
-              left: this.cardRefs[this.state.editCardId].getBoundingClientRect().left 
-            }}
-          /> 
-      }
-      </div>
+      <Draggable 
+        draggableId={this.props.id}
+        index={this.props.index}>
+          {(provided) => (
+          <div className="cards-list"
+              ref={provided.innerRef}
+              {...provided.draggableProps}>
+              {this.renderHeader(provided)}
+              {this.renderCards()}
+              {this.renderFooter()}
+              { 
+                this.state.editCardId && 
+                <CardEditor 
+                  initialValue={this.state.editCardText}
+                  tags={this.state.editCardTags}
+                  onCopyCard={this.handleCopyCard}
+                  onArchiveCard={this.handleArchiveCard}
+                  onSaveCard={this.handleSaveCard}
+                  onCancelEdit={this.handleCancelEdit}
+                  onRemoveTag={this.handleRemoveTag}
+                  onAddTag={this.handleAddTag}
+                  position={{
+                    top: this.cardRefs[this.state.editCardId].getBoundingClientRect().top,
+                    left: this.cardRefs[this.state.editCardId].getBoundingClientRect().left 
+                  }}
+              /> 
+          }
+          </div>
+          )}
+      </Draggable>
     );
   }
 }

@@ -34,6 +34,7 @@ class Board extends Component {
     this.handleEditCard = this.handleEditCard.bind(this);
     this.handleRemoveTag = this.handleRemoveTag.bind(this);
     this.handleAddTag = this.handleAddTag.bind(this);
+    this.handleDragEnd = this.handleDragEnd.bind(this)
   }
 
   componentDidMount() {
@@ -289,10 +290,13 @@ class Board extends Component {
 
   render() {
     return (
-      <div className="board">
-        {this.renderLists()}
-        {this.renderNewList()}
-      </div>
+      <DragDropContext onDragEnd={this.handleDragEnd}>
+        <div className="board">
+          {this.renderLists()}
+          {this.renderNewList()}
+        </div>
+      </DragDropContext>
+
     );
   }
 }
