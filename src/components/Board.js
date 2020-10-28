@@ -22,19 +22,6 @@ class Board extends Component {
       openMenuId: null,
     };
 
-    this.handleAddList = this.handleAddList.bind(this);
-    this.handleRemoveList = this.handleRemoveList.bind(this);
-    this.handleAddCard = this.handleAddCard.bind(this);
-    this.handleRemoveCard = this.handleRemoveCard.bind(this);
-    this.handleRemoveAllCards = this.handleRemoveAllCards.bind(this);
-    this.handleCopyCard = this.handleCopyCard.bind(this);
-    this.handleCopyList = this.handleCopyList.bind(this);
-    this.handleMoveAllCards = this.handleMoveAllCards.bind(this);
-    this.handleToggleMenu = this.handleToggleMenu.bind(this);
-    this.handleEditCard = this.handleEditCard.bind(this);
-    this.handleRemoveTag = this.handleRemoveTag.bind(this);
-    this.handleAddTag = this.handleAddTag.bind(this);
-    this.handleDragEnd = this.handleDragEnd.bind(this)
   }
 
   componentDidMount() {
@@ -45,7 +32,7 @@ class Board extends Component {
     });
   }
 
-  handleAddList(title = "") {
+  handleAddList = (title = "") => {
     if (title.trim()) {
       const id = _generateId();
       const { lists, listOrder } = this.state;
@@ -62,7 +49,7 @@ class Board extends Component {
     }
   }
 
-  handleRemoveList(listId) {
+  handleRemoveList = (listId) => {
     const { lists, listOrder, cards } = this.state;
     lists[listId].cardIds.map((id) => delete cards[id]);
     delete lists[listId];
@@ -78,7 +65,7 @@ class Board extends Component {
     });
   }
 
-  handleAddCard(listId, description = "") {
+  handleAddCard = (listId, description = "") => {
     if (description.trim()) {
       const { lists, cards } = this.state;
       const id = _generateId();
@@ -98,7 +85,7 @@ class Board extends Component {
   }
 
 
-  handleRemoveCard(listId, cardId) {
+  handleRemoveCard = (listId, cardId) => {
     const { lists, cards } = this.state;
     delete cards[cardId];
     const cardIndex = lists[listId].cardIds.indexOf(cardId);
@@ -108,7 +95,7 @@ class Board extends Component {
     this.setState({ lists, cards });
   }
 
-  handleRemoveAllCards(listId) {
+  handleRemoveAllCards = (listId) => {
     const { lists, cards } = this.state;
     lists[listId].cardIds.map((id) => delete cards[id]);
     lists[listId].cardIds = [];
@@ -120,7 +107,7 @@ class Board extends Component {
     });
   }
 
-  handleCopyCard(listId, cardId) {
+  handleCopyCard = (listId, cardId) => {
     let lists = {...this.state.lists};
     let cards = {...this.state.cards};
     const id = _generateId();
@@ -131,7 +118,7 @@ class Board extends Component {
   }
 
 
-  handleCopyList(listId) {
+  handleCopyList = (listId) => {
     let lists = {...this.state.lists};
     let cards = {...this.state.cards};
     let listOrder = [...this.state.listOrder];
@@ -150,7 +137,7 @@ class Board extends Component {
   }
 
 
-  handleMoveAllCards(listId) {
+  handleMoveAllCards = (listId) => {
     let lists = {...this.state.lists};
     let cardIds = [];
     for (let id in lists) {
@@ -163,13 +150,13 @@ class Board extends Component {
     this.setState({ lists, openMenuId: null });
   }
 
-  handleToggleMenu(listId) {
+  handleToggleMenu = (listId) => {
     this.setState({ 
       openMenuId: this.state.openMenuId !== listId ? listId : null
     })
   }
 
-  handleEditCard(cardId, description = "") {
+  handleEditCard = (cardId, description = "") => {
     const { cards } = this.state;
     cards[cardId].description = description;
     this.setState({
@@ -177,7 +164,7 @@ class Board extends Component {
     });
   }
 
-  handleRemoveTag(cardId, tagId) {
+  handleRemoveTag = (cardId, tagId) => {
     let cards = {...this.state.cards};
     if (cards[cardId]) {
       cards[cardId].tags.splice(tagId, 1);
@@ -185,7 +172,7 @@ class Board extends Component {
     this.setState({ cards});
   }
 
-  handleAddTag(cardId, text = '') {
+  handleAddTag = (cardId, text = '') => {
     let cards = {...this.state.cards};
     if (cards[cardId]) {
       cards[cardId].tags.push(text);
@@ -193,7 +180,7 @@ class Board extends Component {
     this.setState({ cards });
   }
 
-  handleDragEnd({ destination, source, draggableId, type }) {
+  handleDragEnd = ({ destination, source, draggableId, type }) => {
     if (!destination) {
       return;
     }
