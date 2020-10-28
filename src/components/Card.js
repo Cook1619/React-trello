@@ -1,16 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Draggable } from "react-beautiful-dnd";
 // Components
 import Tag from "./Tag";
 
-const Card = ({ id, number, description, tags }) => (
-  <div className="card">
-    {tags.map((tag, index) => (
-      <Tag key={index} text={tag} />
-    ))}
-    <p>{`# ${number} ${description}`}</p>
-  </div>
-);
+const Card = ({ id, index, number, description, tags = [] }) => {
+  return (
+    <Draggable draggableId={id} index={index}>
+      {(provided, snapshot) => (
+        <div
+          className="card"
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          {tags.length > 0 && (
+            <div style={{ marginBottom: "5px" }}>
+              {tags.map((tag, i) => (
+                <Tag key={i} text={tag} />
+              ))}
+            </div>
+          )}
+          <p style={{ margin: 0 }}>{"#" + number + " " + description}</p>
+        </div>
+      )}
+    </Draggable>
+  );
+};
 
 Card.propTypes = {
   id: PropTypes.string.isRequired,
