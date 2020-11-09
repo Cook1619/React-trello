@@ -98,7 +98,8 @@ const CardEditor = ({
                     </ul>
                     <h4 className="new-label-title">Add a new label</h4>
                     <Form
-                      type="labels"
+                      type="editor"
+                      initialValue=""
                       buttonText="Add"
                       placeholder="Enter a name for this label..."
                       onClickSubmit={onAddTag}
